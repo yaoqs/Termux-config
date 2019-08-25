@@ -52,7 +52,7 @@ $ termux-setup-storage
 ### 关于root权限的使用
 如果想要更好的配合root权限使用Termux，可以使用termux-sudo，为命令提供root权限，安装命令如下：
 ```
-git clonehttps://gitlab.com/st42/termux-sudo.git
+git clone https://gitlab.com/st42/termux-sudo.git
 ```
 然后进入路径，执行以下命令将其复制到bin目录：
 ```
