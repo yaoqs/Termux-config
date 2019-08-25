@@ -1,6 +1,6 @@
 # Termux-config
 
-<img src="https://termux.com/files/htop_framed.png" width="300">
+<img src="https://wiki.termux.com/images/2/21/Weechat-with-keyboard_framed.png" width="300" align="middle">
 
 ## About/关于
 * https://termux.com
@@ -8,8 +8,25 @@
 * https://github.com/termux/termux-packages
 * The Termux Wiki https://wiki.termux.com/wiki/Main_Page
 
-## Install/安装
+## Installation/安装
 建议到官网下载或到应用市场下载安装，无需root https://termux.com/
+* [Google Play](https://play.google.com/store/apps/details?id=com.termux)
+* [F-Droid ](https://f-droid.org/repository/browse/?fdid=com.termux)
+
+## Addons
+Termux has some extra features. You can add them by installing addons:
+* [Termux:API](https://wiki.termux.com/wiki/Termux:API)
+ Access Android and Chrome hardware features.
+* [Termux:Boot](https://wiki.termux.com/wiki/Termux:Boot)
+ Run script(s) when your device boots.
+* [Termux:Float](https://wiki.termux.com/wiki/Termux:Float)
+ Run Termux in a floating window.
+* [Termux:Styling](https://wiki.termux.com/wiki/Termux:Styling)
+    Have color schemes and powerline-ready fonts customize the appearance of the Termux terminal.
+* [Termux:Task](https://wiki.termux.com/wiki/Termux:Task)
+    An easy way to call Termux executables from Tasker and compatible apps.
+* [Termux:Widget](https://wiki.termux.com/wiki/Termux:Widget)
+    Start small scriptlets from the home screen.
 
 ## Environment/环境
 ### 更新
