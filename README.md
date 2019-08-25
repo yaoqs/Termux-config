@@ -6,6 +6,7 @@
 * https://termux.com
 * https://github.com/termux/termux-app
 * https://github.com/termux/termux-packages
+* The Termux Wiki https://wiki.termux.com/wiki/Main_Page
 
 ## Install/安装
 建议到官网下载或到应用市场下载安装，无需root https://termux.com/
@@ -169,8 +170,10 @@ $ python -m http.server 8080
 
 ### 架设 [Apache 服务器](http://www.termuxtutorials.ga/2018/06/how-to-install-apache2-in-termux-termux.html)
 
-### 远程访问手机
+### 远程访问手机/Remote Access
 通过（FTP、SSH、Rsync）访问手机 https://wiki.termux.com/wiki/Remote_Access
+
+### [Bypassing NAT](https://wiki.termux.com/wiki/Bypassing_NAT)
 
 ## 渗透测试
 ### Hydra
@@ -242,4 +245,3 @@ git clonehttps://github.com/reverse-shell/routersploit
 python rsf.py
 ```
 注意，此处不是python2。也可以通过相同的方法定义命令，前面的Metasploit也是如此。
-
