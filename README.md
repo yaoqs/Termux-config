@@ -8,10 +8,66 @@
 * https://github.com/termux/termux-packages
 * The Termux Wiki https://wiki.termux.com/wiki/Main_Page
 
+Termux是一个Android下一个高级的终端模拟器，开源且不需要root,支持apt管理软件包，十分方便安装软件包，完美支持Python,PHP,Ruby,Go,Nodejs,MySQL等。随着智能设备的普及和性能的不断提升，如今的手机、平板等的硬件标准已达到了初级桌面计算机的硬件标准,用心去打造完全可以把手机变成一个强大的工具. 
+
 ## Installation/安装
 建议到官网下载或到应用市场下载安装，无需root https://termux.com/
 * [Google Play](https://play.google.com/store/apps/details?id=com.termux)
 * [F-Droid ](https://f-droid.org/repository/browse/?fdid=com.termux)
+
+## 基本操作
+### 长按屏幕
+显示菜单项（包括复制、粘贴、更多），此时屏幕出现可选择的复制光标 
+```
+长按屏幕
+├── COPY:复制
+├── PASTE:更多
+├── More:更多
+   ├── Select URL: 选择网址
+   └── Share transcipt: 分享命令脚本
+   └── Reset: 重置
+   └── Kill process: 杀掉当前终端会话进程
+   └── Style: 风格配色
+   └── Help: 帮助文档
+```
+### 从左向右滑动
+显示隐藏式导航栏，可以新建、切换、重命名会话session和调用弹出输入法 
+### 显示扩展功能按键
+扩展功能键是什么?就是PC端常用的按键如:ESC键，CTR键，TAB键,但是手机上难以操作的一些按键. 
+### 常用快捷键
+Ctrl键是终端用户常用的按键 – 但大多数触摸键盘都没有这个按键。为此，Termux使用音量减小按钮来模拟Ctrl键。
+例如，在触摸键盘上按音量减小+ L发送与在硬件键盘上按Ctrl + L相同的输入。
+```
+    Ctrl+A -> 将光标移动到行首
+    Ctrl+C -> 中止当前进程
+    Ctrl+D -> 注销终端会话
+    Ctrl+E -> 将光标移动到行尾
+    Ctrl+K -> 从光标删除到行尾
+    Ctrl+L -> 清除终端
+    Ctrl+Z -> 挂起（发送SIGTSTP到）当前进程
+```
+音量加键也可以作为产生特定输入的特殊键.
+```
+    音量加+E -> Esc键
+    音量加+T -> Tab键
+    音量加+1 -> F1（和音量增加+ 2→F2等）
+    音量加+0 -> F10
+    音量加+B -> Alt + B，使用readline时返回一个单词
+    音量加+F -> Alt + F，使用readline时转发一个单词
+    音量加+X -> Alt+X
+    音量加+W -> 向上箭头键
+    音量加+A -> 向左箭头键
+    音量加+S -> 向下箭头键
+    音量加+D -> 向右箭头键
+    音量加+L -> | （管道字符）
+    音量加+H -> 〜（波浪号字符）
+    音量加+U -> _ (下划线字符)
+    音量加+P -> 上一页
+    音量加+N -> 下一页
+    音量加+. -> Ctrl + \（SIGQUIT）
+    音量加+V -> 显示音量控制
+    音量加+Q -> 显示额外的按键视图
+```
 
 ## Addons
 Termux has some extra features. You can add them by installing addons:
@@ -85,6 +141,26 @@ sudo
     termux-chroot
 ```
 root 时输入exit可以退回普通用户。
+### 手机已经root
+安装tsu,这是一个su的termux版本,用来在termux上替代su:
+```
+pkg install tsu
+```
+然后终端下面输入:
+```
+tsu
+```
+即可切换root用户,这个时候会弹出root授权提示,给予其root权限.在管理员身份下，输入exit可回到普通用户身份。
+
+### 目录环境结构
+```
+~ > echo $HOME
+/data/data/com.termux/files/home
+ ~ > echo $PREFIX
+/data/data/com.termux/files/usr
+ ~ > echo $TMPPREFIX
+/data/data/com.termux/files/usr/tmp/zsh
+```
 
 ## Package manager/软件包管理
 除了apt命令，Termux 还提供pkg命令进行软件包管理。
@@ -99,9 +175,22 @@ $ pkg uninstall [package name]
 $ pkg list-all
 ```
 其实，pkg的[底层](https://github.com/termux/termux-packages/issues/2151#issuecomment-486184252)就是apt，只是运行前会执行一次apt update，保证安装的是最新版本。所以，apt install sl基本等同于pkg install sl。Termux 支持的软件包清单，可以到[这里](https://github.com/termux/termux-packages/tree/master/packages)查看。
+```
+pkg search <query>              搜索包
+pkg install <package>           安装包
+pkg uninstall <package>         卸载包
+pkg reinstall <package>         重新安装包
+pkg update                      更新源
+pkg upgrade                     升级软件包
+pkg list-all                    列出可供安装的所有包
+pkg list-installed              列出已经安装的包
+pkg shoe <package>              显示某个包的详细信息
+pkg files <package>             显示某个包的相关文件夹路径
+```
 
 ## 优化
-我们通过oh-my-zsh来代替默认的 shell。首先需要安装curl，最好也安上git和wget
+### shell
+通过oh-my-zsh来代替默认的 shell。首先需要安装curl，最好也安上git和wget
 ```
     pkg install curl
     pkg install git
@@ -119,6 +208,21 @@ $ pkg list-all
 脚本结束重启就会生效啦，如果想重新选择可以执行
 ```
     $ ~/termux-ohmyzsh/install.sh
+```
+### 创建QQ文件夹软连接
+手机上一般经常使用手机QQ来接收文件,这里为了方便文件传输,直接在storage目录下创建软链接.这样可以直接在home目录下去访问QQ文件夹,非常方便文件的传输,大大提升了工作效率. 
++ QQ
+```
+ln -s /data/data/com.termux/files/home/storage/shared/tencent/QQfile_recv QQ
+```
++ TIM
+```
+ln -s /data/data/com.termux/files/home/storage/shared/tencent/TIMfile_recv TIM
+```
+
+### 修改启动问候语
+```
+vim $PREFIX/etc/motd
 ```
 
 ## 常用软件包
@@ -160,8 +264,17 @@ $ apt install python2
 ### pip模块管理器
 优先级高
 ```
-apt install pip
+apt install pip 
+# pkg instll python
+python2 -m pip install --upgrade pip 
 python -m pip install --upgrade pip
+```
+### ipython
+ipython是一个python的交互式shell，支持变量自动补全，自动缩进，支持bash shell命令，内置了许多很有用的功能和函数。学习ipython将会让我们以一种更高的效率来使用python。先安装clang,否则直接使用pip安装ipython会失败报错.
+```
+pkg install clang
+pip install ipython
+pip3.6 install ipython
 ```
 ### 常用python模块
 + lxml——比标准库里xml模块性能更强大的xml处理模块
@@ -270,6 +383,11 @@ bash metasploit.sh
 ```
 就可以运行Metasploit了。
 
+重建数据库缓存
+```
+msf > db_rebuild_cache
+```
+
 ### Nmap
 一款非常经典的端口扫描工具，安装命令也非常简单：
 ```
@@ -280,7 +398,7 @@ pkg install nmap
 ### sqlmap
 一款特别经典的sql注入工具，这个需要python2才能运行，安装命令如下：
 ```
-git clonehttps://github.com/sqlmapproject/sqlmap.git
+git clone https://github.com/sqlmapproject/sqlmap.git
 ```
 通过cd进入sqlmap路径之后，使用如下命令进入sqlmap：
 ```
@@ -310,7 +428,7 @@ alias sqlmap=“python2 /sql的绝对路径/sqlmap.py”
 ### RouterSploit
 这是一个还算经典的路由器漏洞利用工具，需要python3，安装命令如下：
 ```
-git clonehttps://github.com/reverse-shell/routersploit
+git clone https://github.com/reverse-shell/routersploit
 ```
 使用和Sqlmap类似，进入routersploit路径后执行：
 ```
@@ -335,12 +453,70 @@ explore IANA's list of ports  https://github.com/ncrocfer/whatportis
 pip install whatportis
 ```
 
+### Slowloris
+低带宽的DoS工具
+```
+git clone https://github.com/gkbrk/slowloris.git
+cd slowloris
+chmod +x slowloris.py
+```
+
+### RED_HAWK
+一款采用PHP语言开发的多合一型渗透测试工具，它可以帮助我们完成信息采集、SQL漏洞扫描和资源爬取等任务。
+```
+pkg install php
+git clone https://github.com/Tuhinshubhra/RED_HAWK.git
+cd RED_HAWK
+php rhawk.php
+```
+### Cupp
+Cupp是一款用Python语言写成的可交互性的字典生成脚本。尤其适合社会工程学，当你收集到目标的具体信息后，你就可以通过这个工具来智能化生成关于目标的字典。
+```
+git clone https://github.com/Mebus/cupp.git
+cd cupp
+python2 cupp.py
+```
+### Hash-Buster
+Hash Buster是一个用python编写的在线破解Hash的脚本，官方说5秒内破解,速度实际测试还不错哦~
+```
+git clone https://github.com/UltimateHackers/Hash-Buster.git
+cd Hash-Buster
+python2 hash.py
+```
+### D-TECT
+D-TECT是一个用Python编写的先进的渗透测试工具, \
+    wordpress用户名枚举 \
+    敏感文件检测 \
+    子域名爆破 \
+    端口扫描 \
+    Wordperss扫描 \
+    XSS扫描 \
+    SQL注入扫描等
+```
+git clone https://github.com/shawarkhanethicalhacker/D-TECT.git
+cd D-TECT
+python2 d-tect.py
+```
+### WPSeku
+WPSeku 是一个用 Python 写的简单的 WordPress 漏洞扫描器，它可以被用来扫描本地以及远程安装的 WordPress 来找出安全问题。被评为2017年最受欢迎的十大开源黑客工具.
+```
+git clone https://github.com/m4ll0k/WPSeku.git
+cd WPSeku
+pip3 install -r requirements.txt
+python3 wpseku.py
+```
+### XSStrike
+XSStrike是一种先进的XSS检测工具。它具有强大的模糊测试引擎.
+```
+git clone https://github.com/UltimateHackers/XSStrike.git
+cd XSStrike
+pip2 install -r requirements.txt
+python2 xsstrike
+```
+
+
 ## lazymux（工具下载器）
-github地址：
-```
-    https://github.com/Gameye98/Lazymux
-```
-> Lazymux tools installer is very easy to use, only provided for lazy termux users.
+Lazymux tools installer is very easy to use, only provided for lazy termux users. github：https://github.com/Gameye98/Lazymux
 
 安装需要 py2 的环境，里面提供了多种工具的下载
 ```
