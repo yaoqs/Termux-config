@@ -31,6 +31,13 @@ Termux has some extra features. You can add them by installing addons:
 ## Environment/环境
 ### 更新
 ```sh
+export EDITOR=vi #设置默认编辑器
+apt edit-sources #编辑源文件
+deb [arch=all,aarch64] deb http://mirrors.tuna.tsinghua.edu.cn/termux stable main #把这行内容写入，并且注释掉原先的源
+pkg up #更新源
+```
+[arch=all,aarch64] 后面的aarch64是手机的平台架构，这个位置默认是arm，所以一定要写。大家可以通过uname -m查看自己的架构
+```sh
 # 连接远程仓库，获取软件包信息
 $ apt update 
 # 更新本地已经安装的软件包
@@ -49,7 +56,9 @@ $ sl
 $ termux-setup-storage
 ```
 执行上面的命令以后，会跳出一个对话框，询问是否允许 Termux 访问手机存储，点击"允许"。这会在当前目录下生成一个storage子目录，它是手机存储的符号链接，后文下载文件就是到这个目录去下载。
+
 ### 关于root权限的使用
+#### termux-sudo
 如果想要更好的配合root权限使用Termux，可以使用termux-sudo，为命令提供root权限，安装命令如下：
 ```
 git clone https://gitlab.com/st42/termux-sudo.git
@@ -64,6 +73,18 @@ chmod 700 /data/data/com.termux/files/usr/bin/sudo
 sudo
 ```
 来执行需要root权限的命令。
+#### proot
+没有 root 的手机是没有 root 权限的。不过 termux 给我们提供了一个解决办法可以模拟 root 权限。
+
+我们下载安装 proot
+```
+    pkg install proot
+```
+然后执行下面的命令即可获得 root 权限
+```
+    termux-chroot
+```
+root 时输入exit可以退回普通用户。
 
 ## Package manager/软件包管理
 除了apt命令，Termux 还提供pkg命令进行软件包管理。
@@ -78,6 +99,27 @@ $ pkg uninstall [package name]
 $ pkg list-all
 ```
 其实，pkg的[底层](https://github.com/termux/termux-packages/issues/2151#issuecomment-486184252)就是apt，只是运行前会执行一次apt update，保证安装的是最新版本。所以，apt install sl基本等同于pkg install sl。Termux 支持的软件包清单，可以到[这里](https://github.com/termux/termux-packages/tree/master/packages)查看。
+
+## 优化
+我们通过oh-my-zsh来代替默认的 shell。首先需要安装curl，最好也安上git和wget
+```
+    pkg install curl
+    pkg install git
+    pkg install wget
+```
+然后通过下面的命令下载并执行优化脚本
+```
+    sh -c "$(curl -fsSL https://github.com/Cabbagec/termux-ohmyzsh/raw/master/install.sh)"
+```
+脚本会让我们选择背景色和字体，我的字体和颜色是 14,6，大家可以自己换一换试试。
+```
+    Enter a number, leave blank to not to change: 14
+    Enter a number, leave blank to not to change: 6
+```
+脚本结束重启就会生效啦，如果想重新选择可以执行
+```
+    $ ~/termux-ohmyzsh/install.sh
+```
 
 ## 常用软件包
 ```
@@ -119,46 +161,59 @@ $ apt install python2
 优先级高
 ```
 apt install pip
+python -m pip install --upgrade pip
 ```
 ### 常用python模块
-•lxml——比标准库里xml模块性能更强大的xml处理模块
++ lxml——比标准库里xml模块性能更强大的xml处理模块
 ```
 这个模块依赖的包很多，需要先安装：
 apt install libcrypt libcrypt-dev
 apt install libxml2 libxml2-dev libxslt libxslt-dev python-libxml2 python-libxslt
 pip install lxml
 ```
-•scrapy——专业爬虫库，依赖于lxml
++ scrapy——专业爬虫库，依赖于lxml
 ```
 先安装依赖项：
 apt install openssl openssl-tool openssl-dev libffi libffi-dev
 再安装：
 pip install scrapy
 ```
-•BeautifulSoup4——专业爬虫库
++ BeautifulSoup4——专业爬虫库
 ```
 pip install BeautifulSoup4
 pip install requests
 ```
-•numpy——数学计算库
++ numpy——数学计算库
 ```
 pip install numpy
 ```
-•matplotlib——绘图模块
++ matplotlib——绘图模块
 ```
 pip install matplotlib
 ```
-•pandas——数据分析模块
++ pandas——数据分析模块
 ```
 pip install pandas
 ```
-•Jupyter Notebook——超级好用的交互式记事本，下一篇会重点谈，和iPython公用内核，建议用这个
++ Jupyter Notebook——超级好用的交互式记事本，下一篇会重点谈，和iPython公用内核，建议用这个
 ```
 pip install jupyter
 ```
-•demjson——json处理库
++ demjson——json处理库
 ```
 pip install demjson
+```
++ pillow——图像图像库
+```
+pip install pillow
+```
++ librosa和python_speech_features ——语音识别库
+```
+pip install librosa
+```
++ Paramiko——SSHv2远程 http://www.paramiko.org/
+```
+pip install paramiko
 ```
 常用的模块也就是这些了，其他的模块可以在需要的时候再进行安装。
 
@@ -204,7 +259,7 @@ pkg install hydra
 ```
 cd $HOME
 pkg install wget
-wgethttps://Auxilus.github.io/metasploit.sh
+wget https://Auxilus.github.io/metasploit.sh
 bash metasploit.sh
 ```
 第一行用于切换到安装目录，可以根据需求自己选择，第二行安装wget，是个命令行下的下载工具，第三行下载用于自动安装Metasploit的批处理文件，第四行bash执行批处理脚本，接下来等待就行了。（按照官网的说法，只要没有红色的报警提示，就是安装成功了)
@@ -262,3 +317,35 @@ git clonehttps://github.com/reverse-shell/routersploit
 python rsf.py
 ```
 注意，此处不是python2。也可以通过相同的方法定义命令，前面的Metasploit也是如此。
+
+### sslscan 
+SSL版本检测与密码套件 https://github.com/rbsec/sslscan/
+
+sslscan是一个高效的Ç程序，它允许你检测SSL版本和加密套件（包括TLS），可以检查心脏滴血漏洞和贵宾犬漏洞。
+```
+apt install sslscan
+```
+
+### httrack
+网站镜像工具,使用者可以通过HTTrack把互联网上的网站页面下载到本地计算机上。在默认设置下，HTTrack对网站页面的下载结果是按照原始站点相对链接的结构来组织的。
+
+### whatportis
+explore IANA's list of ports  https://github.com/ncrocfer/whatportis
+```
+pip install whatportis
+```
+
+## lazymux（工具下载器）
+github地址：
+```
+    https://github.com/Gameye98/Lazymux
+```
+> Lazymux tools installer is very easy to use, only provided for lazy termux users.
+
+安装需要 py2 的环境，里面提供了多种工具的下载
+```
+    pkg install python2
+    git clone https://github.com/Gameye98/Lazymux.git
+```
+
+##  kali
