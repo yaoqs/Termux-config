@@ -214,7 +214,7 @@ termux-wifi-scaninfo
 ```sh
 export EDITOR=vi #设置默认编辑器
 apt edit-sources #编辑源文件
-deb [arch=all,aarch64] deb http://mirrors.tuna.tsinghua.edu.cn/termux stable main #把这行内容写入，并且注释掉原先的源
+deb [arch=all,aarch64] http://mirrors.tuna.tsinghua.edu.cn/termux stable main #把这行内容写入，并且注释掉原先的源
 pkg up #更新源
 ```
 
